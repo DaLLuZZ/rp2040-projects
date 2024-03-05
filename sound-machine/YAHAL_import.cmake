@@ -10,11 +10,11 @@ endif()
 # Check if we need to locate the YAHAL root directory
 if (NOT YAHAL_DIR)
     message("Trying to find YAHAL ...")
-    find_path(YAHAL_DIR .yahal_version yannic/p01 . .. ../..)
+    find_path(YAHAL_DIR .yahal_version . .. ../.. ../../.. ../../../..)
 endif ()
 
 # Try to resolve a relative path
-get_filename_component(YAHAL_DIR "${YAHAL_DIR}" REALPATH BASE_DIR "yannic/p01")
+get_filename_component(YAHAL_DIR "${YAHAL_DIR}" REALPATH BASE_DIR "${CMAKE_CURRENT_LIST_DIR}")
 if (NOT EXISTS ${YAHAL_DIR})
     message(FATAL_ERROR "Directory '${YAHAL_DIR}' not found")
 endif ()

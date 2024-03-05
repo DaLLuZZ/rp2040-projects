@@ -1,15 +1,10 @@
 cmake_minimum_required(VERSION 3.16)
 
-set(CMAKE_BUILD_TYPE DEBUG)
-
 # Set the target board
 set(YAHAL_BOARD "rp2040-launchpad")
 
-set(YAHAL_DIR "${CMAKE_SOURCE_DIR}/../YAHAL")
-
 include(YAHAL_import.cmake)
 
-#project(mct C CXX ASM)
 project(mct)
 
 add_executable(mct
@@ -34,7 +29,6 @@ add_executable(mct
 
 ## Add YAHAL to target
 yahal_add_me(mct)
-
 
 yahal_add_library(mct uGUI)
 
