@@ -5,7 +5,6 @@ set(CMAKE_BUILD_TYPE RELEASE)
 
 # Set the target board
 set(YAHAL_BOARD "rp2040-launchpad")
-set(YAHAL_DIR "../../YAHAL")
 
 # Locate the YAHAL library folder
 include(YAHAL_import.cmake)
