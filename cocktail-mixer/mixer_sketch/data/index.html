@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Cocktailmixer</title>
+    <link rel="icon" type="image/x-icon" href="pictures/favicon.png">
+    <link href="bootstrap.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="stylingPointer.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="tooltip.js"></script>
+    <script src="multislider.js"></script>
+    <script src="stylingSlider.js"></script>
+    <script src="process.js"></script>
+    <script src="bootstrap_javascript.js"></script>
+</head>
+<div class="margin-outside">
+    <div class="modal fade" id="drinkauswahl" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Setzen Sie Ihre vorhandenen Getränke</h1>
+                </div>
+                <div class="modal-body">
+                    <select class="form-select" id="drink-1">
+                    </select>
+                    <select class="form-select" id="drink-2">
+                    </select>
+                    <select class="form-select" id="drink-3">
+                    </select>
+                    <select class="form-select" id="drink-4">
+                    </select>
+                    <select class="form-select" id="drink-5">
+                    </select>
+                    <select class="form-select" id="drink-6">
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="setDrinks()" data-bs-dismiss="modal">
+                        Übernehmen
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col col-lg-6 g-2 justify-content-center d-flex">
+            <h1>Cocktailmixer</h1>
+        </div>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col col-lg-3 g-4 d-flex justify-content-center">
+            <div class="card h-100" id="drink1" onclick="addDrink(1)">
+                <img class="drink-img-1" alt="Getränk 1">
+            </div>
+        </div>
+        <div class="col col-lg-3 g-4 d-flex justify-content-center">
+            <div class="card h-100" id="drink2" onclick="addDrink(2)">
+                <img class="drink-img-2" alt="Getränk 2">
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col col-lg-3 g-4 d-flex justify-content-center">
+            <div class="card h-100" id="drink3" onclick="addDrink(3)">
+                <img class="drink-img-3" alt="Getränk 3">
+            </div>
+        </div>
+        <div class="col col-lg-3 g-4 d-flex justify-content-center">
+            <div class="card h-100" id="drink4" onclick="addDrink(4)">
+                <img class="drink-img-4" alt="Getränk 4">
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col col-lg-3 g-4 d-flex justify-content-center">
+            <div class="card h-100" id="drink5" onclick="addDrink(5)">
+                <img class="drink-img-5" alt="Getränk 5">
+            </div>
+        </div>
+        <div class="col col-lg-3 g-4 d-flex justify-content-center">
+            <div class="card h-100" id="drink6" onclick="addDrink(6)">
+                <img class="drink-img-6" alt="Getränk 6">
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col col-lg-6 g-4">
+            <!-- dynamischer Rangeslider -->
+            <label for="verhaeltnis" class="form-label">Mischverhältnis</label>
+            <div class="wrapper" id="verhaeltnis">
+                <!-- Platzhalter -->
+                <tc-range-slider
+                        theme="circle"
+                        css-links="stylingPointer.css"
+                        disabled="true"
+                ></tc-range-slider>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center" style="margin-top: 35px">
+        <div class="col col-lg-3 g-4">
+            <label class="form-label" for="volumen">Füllmenge</label>
+            <input type="number" id="volumen" min="0" class="form-control" value="200"/>
+        </div>
+        <div class="col col-lg-3 g-4 justify-content-center d-flex">
+            <button type="button" class="btn btn-success" onclick="sendGetraenk()">Start</button>
+        </div>
+    </div>
+</div>
+<body>
+<script defer>
+    let drinks = [];
+    // Session-Management (beim initalen Öffnen werden möglichen Drinks gewählt)
+    window.onload = function () {
+        if (!sessionStorage.getItem('is_reloaded')) {
+            for (let i = 1; i <= 6; i++) {
+                let selection = document.querySelector(`#drink-${i}`);
+                Drink.forEach(drink => {
+                    let option = document.createElement("option");
+                    option.innerHTML = drink;
+                    selection.append(option)
+                });
+                selection.value = Drink[i];
+            }
+            const myModal = new bootstrap.Modal(document.getElementById('drinkauswahl'), {})
+            myModal.show();
+            sessionStorage.setItem('is_reloaded', true);
+        } else {
+            // Fügt den Karten die Bilder der möglichen Getränke hinzu
+            for (let i = 0; i < 6; i++) {
+                document.querySelector(`.drink-img-${i + 1}`).setAttribute("src", JSON.parse(sessionStorage.getItem("drinks"))[i] + '.png');
+            }
+        }
+    };
+
+    /**
+     *  Fügt der Session die zur Auswahl stehenden Drinks hinzu
+     */
+    function setDrinks() {
+        for (let i = 1; i <= 6; i++) {
+            let selection = document.querySelector(`#drink-${i}`);
+            drinks.push(selection.value)
+            document.querySelector(`.drink-img-${i}`).setAttribute("src", selection.value + '.png');
+        }
+        sessionStorage.setItem("drinks", JSON.stringify(drinks));
+    }
+    // Array der zur Auswahl stehenden Drinks
+    const Drink = [ 'Cola', 'Fanta', 'Sprite', 'Bacardi',
+                    'Havana', 'Wodka', 'Korn', 'Flimm',
+                    'Asbach', 'CaptainMorgan'];
+</script>
+</body>
+</html>
+<style lang="scss">
+    tc-range-slider {
+        --width: 100% !important;
+    }
+
+    @media (min-width: 992px) {
+        .card {
+            --bs-card-border-width: 0.5vh;
+            width: 11.2vw;
+            height: 11.2vh;
+        }
+    }
+
+    @media (min-width: 768px) and (max-width: 991px) {
+        .card {
+            --bs-card-border-width: 0.5vh;
+            width: 15vw;
+            height: 15vh;
+        }
+    }
+
+    @media (min-width: 395px) and (max-width: 767px) {
+        .card {
+            --bs-card-border-width: 0.5vh;
+            width: 18vw;
+            height: 18vh;
+        }
+    }
+
+    @media (max-width: 394px) {
+        .card {
+            --bs-card-border-width: 0.5vh;
+            width: 35vw;
+            height: 35vh;
+        }
+    }
+
+    .btn {
+        width: 100%;
+        height: 50%;
+        position: relative;
+        top: 50%;
+    }
+
+    .margin-outside {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+
+    .form-select:not(:first-child) {
+        margin-top: 0.5rem;
+    }
+</style>
