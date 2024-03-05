@@ -1,0 +1,5 @@
+Schritt 1) 4 Sounds im Startbildschirm auswählen. Die rechte Liste stellt dabei die Auswahlmöglichkeiten dar und die linke Liste die aktuell ausgewählten Sounds. 
+Schritt 2) Nach Auswahl der Sounds den Play-Button drücken und es erscheint eine Matrix auf dem Bildschirm.
+Schritt 3) Matrixkästchen anklicken, dabei gilt Reihe = Sound und Spalte = Zeitpunkt.
+Schritt 4) Sobald alle gewünschten Kästchen gesetzt sind, den Play-Button anklicken.
+Hinweis: Zum Neustarten der Anwendung den Reset-Schalter des MCT benutzen.
