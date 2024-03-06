@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 # Set the target board
 set(YAHAL_BOARD "rpi-pico")
-set(YAHAL_DIR ~/gitlab-FH/YAHAL)
+# set(YAHAL_DIR ~/gitlab/YAHAL)
 
 # Locate the YAHAL library folder
 include(YAHAL_import.cmake)
